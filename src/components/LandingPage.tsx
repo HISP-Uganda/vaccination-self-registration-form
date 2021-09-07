@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom';
-
 export const LandingPage = () => {
     let history = useHistory();
     return (
         <div className="px-16  my-2 text-xl justify-center block">
             <h2 className="font-bold block">Welcome to Uganda National COVID-19 Vaccination Pre-Registration Portal</h2>
             <p className="text-base block">
+           
                 The Ministry of Health, Uganda would like to invite all persons desiring to receive COVID-19 Vaccination to register for an appointment using this online self-registration Platform.
                 <h1 className="text-lg font-bold text-red-500">Please Note:</h1>
                 <ul className="text-base list-disc pl-4">

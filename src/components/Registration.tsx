@@ -108,7 +108,8 @@ export const Registration = () => {
                   <Text>Preffered Vaccination Site:</Text>
                   <Text style={{ flex: 1, textAlign: 'right' }}>{orgUnitName}</Text>
                 </View>
-
+                <View>
+                </View>
               </View>
               <View>
 
