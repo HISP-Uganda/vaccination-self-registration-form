@@ -89,7 +89,11 @@ export const BookingForm = () => {
               dataValues: [{
                 dataElement: "Bkgeb98v5Ea",
                 value: true
-              }
+              },
+                {
+                dataElement: "Bu7jnTZ6i9m",
+                value: false
+                }
               ]
             },
           ],
@@ -106,7 +110,12 @@ export const BookingForm = () => {
         if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
           await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
           history.push('/pdf')
-          Swal.fire('You have Successfully Registered for vaccination!')
+          Swal.fire({
+            icon: 'success',
+            title: 'Congratulations',
+            text:'You have Successfully Registered for vaccination!'
+          })
+          console.log(payload)
         } else {
           Swal.fire({
             icon: 'error',
