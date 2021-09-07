@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import { $store, changeData } from "../Store";
+import Swal from 'sweetalert2'
 
 export const BookingForm = () => {
   const store = useStore($store)
@@ -88,7 +89,11 @@ export const BookingForm = () => {
               dataValues: [{
                 dataElement: "Bkgeb98v5Ea",
                 value: true
-              }
+              },
+                {
+                dataElement: "Bu7jnTZ6i9m",
+                value: false
+                }
               ]
             },
           ],
@@ -105,15 +110,32 @@ export const BookingForm = () => {
         if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
           await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
           history.push('/pdf')
-          alert('You have successfully registered for vaccination')
+          Swal.fire({
+            icon: 'success',
+            title: 'Congratulations',
+            text:'You have Successfully Registered for vaccination!'
+          })
+          console.log(payload)
         } else {
-          alert('Please eneter the right format of the phone number e.g 256788907653 ')
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please eneter the right format of the phone number e.g 256788907653 !',
+          })
         }
       } else {
-        alert('Record with entered NIN has already been registered, enter a different NIN')
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Record with entered NIN has already been registered, enter a different NIN!',
+        })
       }
     } else {
-      alert('please Check the Length of the NIN ')
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'please Check the Length of the NIN !',
+      })
     }
 
   }
@@ -125,7 +147,7 @@ export const BookingForm = () => {
           <h1 className="text-sm py-1 w-full flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-8 right">
             Identification
           </h1></div>
-          <div className="flex flex-wrap -mx-3 my-2 justify-center block">
+          <div className="flex flex-wrap -mx-3 my-2 block">
             <div className="w-full text-lg md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-2">
                 Client Category <span className="text-red-500 font-xl">*</span>
@@ -144,22 +166,6 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
-            {store.pCnbIVhxv4j === 'National' &&
-              <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  NIN (For Ugandans) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
-                  id="nin"
-                  value={store.Ewi7FUfcHAD}
-                  className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="text"
-                  placeholder="Enter Your NIN (14 Characters)"
-                  required />
-              </div>}
-
-
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Sex <span className="text-red-500">*</span>
@@ -178,6 +184,20 @@ export const BookingForm = () => {
 
               </div>
             </div>
+            {store.pCnbIVhxv4j === 'National' &&
+              <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                  NIN (For Ugandans) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
+                  id="nin"
+                  value={store.Ewi7FUfcHAD}
+                  className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                  placeholder="Enter Your NIN (14 Characters)"
+                  required />
+              </div>}
           </div>
 
 
@@ -312,7 +332,7 @@ export const BookingForm = () => {
 
                   }}
                   value={store.dob}
-                  disabledDate={(date: moment.Moment) => moment().diff(date, "years") <= 18}
+                  disabledDate={(date: moment.Moment) => moment().diff(date, "years") < 18}
                   defaultPickerValue={moment().subtract(18, "years")}
                 />
               </div>
@@ -369,24 +389,24 @@ export const BookingForm = () => {
           </h1>
           <div className="w-full flex flex-wrap -mx-3">
             <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 District/Subcounty <span className="text-red-500">*</span>
               </label>
               <Select
                 value={store.Za0xkyQDpxA}
                 onChange={(value) => changeData({ key: "Za0xkyQDpxA", value })}
                 isSearchable={true}
-                required
+                isClearable={true}
                 defaultValue={{ value: "Select District/SubCounty", label: "Select District/SubCounty" }}
                 options={districtSubcounty.map((d: { code: string, name: string }) => (
                   { value: d.code, label: d.name }
                 ))
                 }
-                className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
               </Select>
             </div>
-            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Parish
               </label>
@@ -441,13 +461,14 @@ export const BookingForm = () => {
                   value={selectedDistrict}
                   onChange={(option: any) => setSelectedDistrict(option)}
                   isSearchable={true}
-                  required
+                  isClearable={true}
+                  required = {true}
                   defaultValue={{ value: "Select District", label: "Select District" }}
                   options={districts.map((d: { id: string, name: string }) => (
                     { value: d.id, label: d.name }
                   ))
                   }
-                  className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                 </Select>
               </div>
@@ -461,13 +482,14 @@ export const BookingForm = () => {
                   value={store.orgUnit}
                   onChange={(value) => changeData({ key: "orgUnit", value })}
                   isSearchable={true}
-                  required
+                  required={true}
+                  isClearable={true}
                   defaultValue={{ value: "Select Facility", label: "Select Facility" }}
                   options={facilities.map((d: { id: string, name: string }) => (
                     { value: d.id, label: d.name }
                   ))
                   }
-                  className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                 </Select>
               </div>
