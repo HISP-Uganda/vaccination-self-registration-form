@@ -3,7 +3,10 @@ import { Document, Page, StyleSheet, Text, View, Image } from '@react-pdf/render
 import coa from '../coa.png';
 import { useStore } from "effector-react";
 import { $store } from "../Store";
-const Barcode = require('react-barcode');
+// import { QRCode } from "qrcode";
+// import { Bar } from 'react-barcode';
+//const Barcode = require('react-barcode');
+
 
 //styles
 const styles = StyleSheet.create({
@@ -49,8 +52,13 @@ const styles = StyleSheet.create({
 // Create Document Component
 export const Registration = () => {
   const store = useStore($store);
+  const { orgUnit: { label: orgUnitName }, dueDate } = store  
 
-  const { orgUnit: { label: orgUnitName }, dueDate } = store
+let canvas;
+canvas = document.createElement('canvas');
+
+const qr = canvas.toDataURL();
+
   return (<Document>
     <Page size="A4" style={styles.page} orientation="portrait">
       <View style={{
@@ -109,11 +117,9 @@ export const Registration = () => {
                   <Text style={{ flex: 1, textAlign: 'right' }}>{orgUnitName}</Text>
                 </View>
                 <View>
+                <Image src={qr}/>
                 </View>
-              </View>
-              <View>
-
-              </View>
+              </View>  
             </View>
           </View>
           <View
@@ -122,7 +128,6 @@ export const Registration = () => {
           </View>
         </View>
       </View>
-      <Barcode value="test" />
     </Page>
   </Document>)
 };

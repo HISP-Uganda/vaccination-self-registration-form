@@ -40,7 +40,7 @@ export const BookingForm = () => {
     setVac(dataSetUnits)
   };
 
-  const fetchDistrictFacilities = async () => {
+  const fetchDistrictFacilities = async() => {
     if (selectedDistrict) {
       const { data: { organisationUnits } } = await api.get("dhis2", {
         params: { url: `organisationUnits/${selectedDistrict.value}`, includeDescendants: true, paging: false, fields: 'id,name,level' },
@@ -187,7 +187,7 @@ export const BookingForm = () => {
             {store.pCnbIVhxv4j === 'National' &&
               <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  NIN (For Ugandans) <span className="text-red-500">*</span>
+                  NIN (For Ugandans)
                 </label>
                 <input
                   onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
@@ -196,13 +196,12 @@ export const BookingForm = () => {
                   className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
                   placeholder="Enter Your NIN (14 Characters)"
-                  required />
+                  />
               </div>}
           </div>
 
 
           <div className="w-full flex flex-wrap -mx-3 ">
-            {store.pCnbIVhxv4j !== 'National' && <>
               <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
                 <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
                   Alternative ID Type <span className="text-red-500">*</span>
@@ -242,7 +241,6 @@ export const BookingForm = () => {
                   required
                 />
               </div>
-            </>}
           </div>
 
           <h1 className="text-sm py-2 text-center flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-4 my-2">

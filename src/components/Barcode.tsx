@@ -1,8 +1,7 @@
 import React from 'react'
-
 import { QRCode } from "react-qr-svg";
 
-export const Home = () => {
+export const Barcode = () => {
   return (
     <div>
       <QRCode
@@ -10,7 +9,7 @@ export const Home = () => {
         fgColor="#000000"
         level="Q"
         style={{ width: 150, height: 150 }}
-        value="some texthhhhhhhhhhhhhh"
+        value="some text"
       />
     </div>
   )
