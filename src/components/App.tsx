@@ -4,6 +4,7 @@ import { BookingForm } from "./BookingForm";
 import { PDFForm } from "./PDFForm";
 import { LandingPage } from "./LandingPage";
 import { Stepper } from "./Stepper";
+import { Home } from "./Home"
 import coa from "../coa.png";
 
 const styles = StyleSheet.create({
@@ -38,7 +39,10 @@ function App() {
             </h1>
           </div>
         <Router>
-          <Switch>
+        <Switch>
+        <Route path="/home" exact>
+              <Home />
+            </Route>
             <Route path="/" exact>
               <LandingPage />
             </Route>
