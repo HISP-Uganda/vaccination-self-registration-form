@@ -40,7 +40,7 @@ function App() {
           </div>
         <Router>
         <Switch>
-        <Route path="/home" exact>
+        <Route path="/homes" exact>
               <Home />
             </Route>
             <Route path="/" exact>

@@ -1,18 +1,14 @@
-import { FC } from 'react';
 import { Document, Page, StyleSheet, Text, View, Image } from '@react-pdf/renderer';
 import coa from '../coa.png';
 import { useStore } from "effector-react";
 import { $store } from "../Store";
-// import { QRCode } from "qrcode";
-// import { Bar } from 'react-barcode';
-//const Barcode = require('react-barcode');
-
+import QRCode from "qrcode";
 
 //styles
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
     paddingTop: '2px',
   },
   section: {
@@ -52,12 +48,14 @@ const styles = StyleSheet.create({
 // Create Document Component
 export const Registration = () => {
   const store = useStore($store);
-  const { orgUnit: { label: orgUnitName }, dueDate } = store  
+  const { orgUnit: { label: orgUnitName }, dueDate } = store;
 
-let canvas;
-canvas = document.createElement('canvas');
+  let canvas;
+  const data = [store.Ewi7FUfcHAD, store.YvnFn4IjKzx];
+  canvas = document.createElement('canvas');
+  QRCode.toCanvas(canvas, data);
+  const qr = canvas.toDataURL();
 
-const qr = canvas.toDataURL();
 
   return (<Document>
     <Page size="A4" style={styles.page} orientation="portrait">
@@ -97,9 +95,10 @@ const qr = canvas.toDataURL();
                   <Text style={{ fontWeight: 'bold' }}>{store.pCnbIVhxv4j}</Text>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', fontSize: '12px', justifyContent: 'space-between', marginBottom: '20px' }}>
-                  <Text>National Identity Number (NIN)</Text>
-                  <Text style={{}}>{store.Ewi7FUfcHAD}</Text>
+                  <Text>National Identity Number (NIN) / Alternative ID</Text>
+                  {store.Ewi7FUfcHAD ? <Text style={{}}>{store.Ewi7FUfcHAD}</Text> : <Text style={{}}>{store.YvnFn4IjKzx}</Text>}
                 </View>
+
                 <View style={{ display: 'flex', flexDirection: 'row', fontSize: '12px', justifyContent: 'space-between', marginBottom: '20px' }}>
                   <Text >Priority Group:</Text>
                   <Text style={{ flex: 1, textAlign: 'right' }}>{store.CFbojfdkIIj}</Text>
@@ -117,9 +116,12 @@ const qr = canvas.toDataURL();
                   <Text style={{ flex: 1, textAlign: 'right' }}>{orgUnitName}</Text>
                 </View>
                 <View>
-                <Image src={qr}/>
+                  <Image
+                    src={qr}
+                    style={{ width: 150, height: 150 }}
+                  />
                 </View>
-              </View>  
+              </View>
             </View>
           </View>
           <View
