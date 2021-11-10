@@ -40,7 +40,7 @@ export const BookingForm = () => {
     setVac(dataSetUnits)
   };
 
-  const fetchDistrictFacilities = async() => {
+  const fetchDistrictFacilities = async () => {
     if (selectedDistrict) {
       const { data: { organisationUnits } } = await api.get("dhis2", {
         params: { url: `organisationUnits/${selectedDistrict.value}`, includeDescendants: true, paging: false, fields: 'id,name,level' },
@@ -60,7 +60,7 @@ export const BookingForm = () => {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { orgUnit: { value, label }, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
+    const { orgUnit: { value}, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
     let attributes = Object.entries(others)
       .filter(([k, v]) => !!v)
       .map(([attribute, value]) => {
@@ -90,10 +90,10 @@ export const BookingForm = () => {
                 dataElement: "Bkgeb98v5Ea",
                 value: true
               },
-                {
+              {
                 dataElement: "Bu7jnTZ6i9m",
                 value: false
-                }
+              }
               ]
             },
           ],
@@ -102,42 +102,80 @@ export const BookingForm = () => {
       attributes,
     };
     //data is false if NIN exists
-    if (/^C[M|F][0-9]{5}[A-Z0-9]{7}$/.test(store.Ewi7FUfcHAD)) {
-      const { data: { trackedEntityInstances } } = await api.get("dhis2", {
-        params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.Ewi7FUfcHAD}` },
-      })
-      if (trackedEntityInstances.length === 0) {
-        if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
-          await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
-          history.push('/pdf')
-          Swal.fire({
-            icon: 'success',
-            title: 'Congratulations',
-            text:'You have Successfully Registered for vaccination!'
-          })
-          console.log(payload)
+    if (store.Ewi7FUfcHAD) {
+      if (/^C[M|F][0-9]{5}[A-Z0-9]{7}$/.test(store.Ewi7FUfcHAD)) {
+        const { data: { trackedEntityInstances } } = await api.get("dhis2", {
+          params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.Ewi7FUfcHAD} ` },
+        })
+        console.log(trackedEntityInstances)
+        if (trackedEntityInstances.length === 0) {
+          if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
+            await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
+            history.push('/pdf')
+            Swal.fire({
+              icon: 'success',
+              title: 'Congratulations',
+              text: 'You have Successfully Registered for vaccination!!'
+            })
+            console.log(payload)
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please eneter the right format of the phone number e.g 256788907653 !',
+            })
+          }
         } else {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please eneter the right format of the phone number e.g 256788907653 !',
+            text: 'Please Enter a different',
           })
         }
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Record with entered NIN has already been registered, enter a different NIN!',
+          icon: 'success',
+          title: 'Congratulations',
+          text: 'You have Successfully Registered for vaccination!!'
         })
       }
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'please Check the Length of the NIN !',
-      })
+    } else if (store.YvnFn4IjKzx) {
+        const { data: { trackedEntityInstances } } = await api.get("dhis2", {
+          params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} ` },
+        })
+        console.log(trackedEntityInstances)
+        if (trackedEntityInstances.length === 0) {
+          if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
+            await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
+            history.push('/pdf')
+            Swal.fire({
+              icon: 'success',
+              title: 'Congratulations',
+              text: 'You have Successfully Registered for vaccination!!'
+            })
+            console.log(payload)
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please eneter the right format of the phone number e.g 256788907653 !',
+            })
+          }
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please Enter a different Alternative ID Number!',
+          })
+        }
+      
     }
-
+    else 
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'please Enter an Alternative ID Number!',
+    })
   }
 
   return (
@@ -190,57 +228,56 @@ export const BookingForm = () => {
                   NIN (For Ugandans)
                 </label>
                 <input
+                  
                   onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
                   id="nin"
                   value={store.Ewi7FUfcHAD}
                   className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
                   placeholder="Enter Your NIN (14 Characters)"
-                  />
+                />
               </div>}
           </div>
 
 
           <div className="w-full flex flex-wrap -mx-3 ">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
-                <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
-                  Alternative ID Type <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <select
-                    onChange={(e) => changeData({ key: "ud4YNaOH3Dw", value: e.target.value })}
-                    id="alternativeidtype"
-                    value={store.ud4YNaOH3Dw}
-                    required
-                    className="block appearance-none w-full  border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  >
-                    <option value="">--Select Alternative ID Type--</option>
-                    <option>Employee ID</option>
-                    <option>Passport</option>
-                    <option>Voters Card</option>
-                    <option>Foreign National ID</option>
-                    <option>Driving License ID</option>
-                    <option>Other ID</option>
-                    <option>Refugee ID</option>
-                    <option>Guarantor NIN</option>
-                  </select>
-                </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
+                Alternative ID Type
+              </label>
+              <div className="relative">
+                <select
+                  onChange={(e) => changeData({ key: "ud4YNaOH3Dw", value: e.target.value })}
+                  id="alternativeidtype"
+                  value={store.ud4YNaOH3Dw}
+                  className="block appearance-none w-full  border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                >
+                  <option value="">--Select Alternative ID Type--</option>
+                  <option>Employee ID</option>
+                  <option>Passport</option>
+                  <option>Voters Card</option>
+                  <option>Foreign National ID</option>
+                  <option>Driving License ID</option>
+                  <option>Other ID</option>
+                  <option>Refugee ID</option>
+                  <option>Guarantor NIN</option>
+                </select>
               </div>
+            </div>
 
-              <div className="w-full md:w-1/2 px-3 mb-6 md:my-0">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
-                  Alternative ID Number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  onChange={(e) => changeData({ key: "YvnFn4IjKzx", value: e.target.value })}
-                  id="alternativeidnumber"
-                  value={store.YvnFn4IjKzx}
-                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="text"
-                  placeholder="e.g 256755898989"
-                  required
-                />
-              </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
+                Alternative ID Number
+              </label>
+              <input
+                onChange={(e) => changeData({ key: "YvnFn4IjKzx", value: e.target.value })}
+                id="alternativeidnumber"
+                value={store.YvnFn4IjKzx}
+                className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="text"
+                placeholder="Enter alternative ID here!!"
+              />
+            </div>
           </div>
 
           <h1 className="text-sm py-2 text-center flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-4 my-2">
@@ -460,7 +497,7 @@ export const BookingForm = () => {
                   onChange={(option: any) => setSelectedDistrict(option)}
                   isSearchable={true}
                   isClearable={true}
-                  required = {true}
+                  required={true}
                   defaultValue={{ value: "Select District", label: "Select District" }}
                   options={districts.map((d: { id: string, name: string }) => (
                     { value: d.id, label: d.name }
