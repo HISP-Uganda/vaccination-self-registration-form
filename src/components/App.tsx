@@ -1,10 +1,12 @@
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react"
 import { StyleSheet } from '@react-pdf/renderer';
 import { BookingForm } from "./BookingForm";
 import { PDFForm } from "./PDFForm";
 import { LandingPage } from "./LandingPage";
 import { Stepper } from "./Stepper";
 import { Home } from "./Home"
+import { Output } from "./Output"
 import coa from "../coa.png";
 
 const styles = StyleSheet.create({
@@ -24,6 +26,7 @@ const styles = StyleSheet.create({
 
 function App() {
   return (
+    <ChakraProvider>
       <div className="App ">
           <div className=" flex justify-center block">
             <img src={coa} alt="MOH" style={styles.image} />
@@ -40,7 +43,7 @@ function App() {
           </div>
         <Router>
         <Switch>
-        <Route path="/homes" exact>
+        <Route path="/home" exact>
               <Home />
             </Route>
             <Route path="/" exact>
@@ -51,6 +54,9 @@ function App() {
             </Route>
             <Route path="/pdf">
               <PDFForm />
+          </Route>
+          <Route path="/output">
+              <Output />
             </Route>
             <Route path="/stepper">
               <Stepper />
@@ -58,6 +64,7 @@ function App() {
           </Switch>
         </Router>
       </div>
+      </ChakraProvider>
   );
 }
 

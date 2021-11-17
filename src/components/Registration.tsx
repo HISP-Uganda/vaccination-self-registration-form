@@ -56,8 +56,7 @@ export const Registration = () => {
   QRCode.toCanvas(canvas, data);
   const qr = canvas.toDataURL();
 
-
-  return (<Document>
+  return ( <Document>
     <Page size="A4" style={styles.page} orientation="portrait">
       <View style={{
         width: '100%',
@@ -88,7 +87,7 @@ export const Registration = () => {
               <View style={{ display: 'flex', padding: 10 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', fontSize: '12px', justifyContent: 'space-between', marginBottom: '20px' }}>
                   <Text>Client Name:</Text>
-                  <Text style={{ fontWeight: 3 }}>{store.sB1IHYu2xQT}</Text>
+                  <Text style={{ fontWeight: 3,  }}>{store.sB1IHYu2xQT}</Text>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', fontSize: '12px', justifyContent: 'space-between', marginBottom: '20px' }}>
                   <Text>Client Category:</Text>
