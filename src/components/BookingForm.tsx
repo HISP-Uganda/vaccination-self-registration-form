@@ -134,9 +134,9 @@ export const BookingForm = () => {
         }
       } else {
         Swal.fire({
-          icon: 'success',
-          title: 'Congratulations',
-          text: 'You have Successfully Registered for vaccination!!'
+          icon: 'error',
+          title: 'Error',
+          text: 'NIN must be 14 Characters!'
         })
       }
     } else if (store.YvnFn4IjKzx) {
