@@ -60,14 +60,14 @@ export const BookingForm = () => {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { orgUnit: { value}, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
+    const { orgUnit: { value }, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
     let attributes = Object.entries(others)
       .filter(([k, v]) => !!v)
       .map(([attribute, value]) => {
         return { attribute, value };
       });
 
-    attributes = [...attributes, { attribute: 'Za0xkyQDpxA', value: subCountyId }]
+    attributes = [...attributes, { attribute: 'Za0xkyQDpxA', value: subCountyId }, { attribute: 'NI0QRzJvQ0k', value: dob.format("YYYY-MM-DD") }]
     const payload = {
       orgUnit: value,
       trackedEntityType: "MCPQUTHX1Ze",
@@ -111,7 +111,7 @@ export const BookingForm = () => {
         if (trackedEntityInstances.length === 0) {
           if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
             await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
-            history.push('/pdf')
+            history.push('/output')
             Swal.fire({
               icon: 'success',
               title: 'Congratulations',
@@ -129,7 +129,7 @@ export const BookingForm = () => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please Enter a different',
+            text: 'Please Enter a different NIN',
           })
         }
       } else {
@@ -140,42 +140,41 @@ export const BookingForm = () => {
         })
       }
     } else if (store.YvnFn4IjKzx) {
-        const { data: { trackedEntityInstances } } = await api.get("dhis2", {
-          params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} ` },
-        })
-        console.log(trackedEntityInstances)
-        if (trackedEntityInstances.length === 0) {
-          if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
-            await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
-            history.push('/pdf')
-            Swal.fire({
-              icon: 'success',
-              title: 'Congratulations',
-              text: 'You have Successfully Registered for vaccination!!'
-            })
-            console.log(payload)
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Please eneter the right format of the phone number e.g 256788907653 !',
-            })
-          }
+      const { data: { trackedEntityInstances } } = await api.get("dhis2", {
+        params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} ` },
+      })
+      console.log(trackedEntityInstances)
+      if (trackedEntityInstances.length === 0) {
+        if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
+          await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
+          history.push('/output')
+          Swal.fire({
+            icon: 'success',
+            title: 'Congratulations',
+            text: 'You have Successfully Registered for vaccination!!'
+          })
         } else {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please Enter a different Alternative ID Number!',
+            text: 'Please eneter the right format of the phone number e.g 256788907653 !',
           })
         }
-      
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please Enter a different Alternative ID Number!',
+        })
+      }
+
     }
-    else 
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'please Enter an Alternative ID Number!',
-    })
+    else
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'please Enter an Alternative ID Number!',
+      })
   }
 
   return (
@@ -228,7 +227,7 @@ export const BookingForm = () => {
                   NIN (For Ugandans)
                 </label>
                 <input
-                  
+
                   onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
                   id="nin"
                   value={store.Ewi7FUfcHAD}
@@ -294,7 +293,7 @@ export const BookingForm = () => {
               value={store.sB1IHYu2xQT}
               className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="text"
-              placeholder="First Name"
+              placeholder="Full Name"
               required
             />
           </div>
@@ -367,9 +366,10 @@ export const BookingForm = () => {
 
                   }}
                   value={store.dob}
-                  disabledDate={(date: moment.Moment) => moment().diff(date, "years") < 18}
+                  disabledDate={(date: moment.Moment) => moment().diff(date, "years") < 0}
                   defaultPickerValue={moment().subtract(18, "years")}
                 />
+                
               </div>
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
@@ -390,7 +390,7 @@ export const BookingForm = () => {
 
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Alternative Number
+                Alternative Phone Number
               </label>
               <input
                 onChange={(e) => changeData({ key: "SSGgoQ6SnCx", value: e.target.value })}
@@ -404,7 +404,7 @@ export const BookingForm = () => {
           </div>
           <div className="w-full">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
-              Relationship with Alternative Number
+              Relationship with Alternative Phone Number
             </label>
             <input
               onChange={(e) => changeData({ key: "Sqq2zIYWBOK", value: e.target.value })}
@@ -469,7 +469,7 @@ export const BookingForm = () => {
             </div>
             <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Place of Work <span className="text-red-500">*</span>
+                Place of Work/ Study<span className="text-red-500">*</span>
               </label>
               <input
                 onChange={(e) => changeData({ key: "ZHF7EsKgiaM", value: e.target.value })}

@@ -11,8 +11,7 @@ export const PDFForm = () => {
     <button onClick={() => history.push("/")}>Back</button>
     <PDFViewer width="100%" height="100%">
       <Registration {...store} />
-    </PDFViewer>
-    
+    </PDFViewer>,
     
   </div>
 };
