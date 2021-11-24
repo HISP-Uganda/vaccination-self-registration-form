@@ -55,12 +55,20 @@ export const Output = () => {
           <Box><Text fontSize="xl">Preferred Vaccination site:</Text></Box><Spacer />
           <Box>{orgUnitName}</Box>
         </Flex>
+        <Flex>
+          <Box><Text fontSize="xl">Main Occupation:</Text></Box><Spacer />
+          <Box>{store.pK0K4T2Cq2f}</Box>
+        </Flex>
+        <Flex>
+          <Box><Text fontSize="xl">School Level:</Text></Box><Spacer />
+          <Box>{store.ZpvNoELGUnJ}</Box>
+        </Flex>
       </Stack>
       <Stack align={"center"}>
         {/* <QRCode value={store.YvnFn4IjKzx} /> */}
         <Image
           src={qr}
-          style={{ width: 150, height: 150 }}
+          style={{ width: 300, height: 300 }}
         />
       </Stack>
     </Box>

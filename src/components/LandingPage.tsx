@@ -25,6 +25,7 @@ export const LandingPage = () => {
                     you will not be able to submit your Information for vaccination.</li>
                 <li>Please be kin on the Phone number format and the NIN number format, because a wrong format will stop you from submitting your information</li>
                 <li> After submitting your information, You will receive a notification of successfull submission of your information and a downloadable pdf file will be available for you to download</li>
+                <li className="text-red-500">Please Remember to select the district and facility where you intend to get vaccinated from</li>
             </ul>
             <div className="pb-8">
                 <button type="button" onClick={() => { history.push('/booking') }}

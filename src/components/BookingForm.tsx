@@ -60,6 +60,7 @@ export const BookingForm = () => {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    
     const { orgUnit: { value }, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
     let attributes = Object.entries(others)
       .filter(([k, v]) => !!v)
@@ -143,7 +144,7 @@ export const BookingForm = () => {
       const { data: { trackedEntityInstances } } = await api.get("dhis2", {
         params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} ` },
       })
-      console.log(trackedEntityInstances)
+      //console.log(trackedEntityInstances)
       if (trackedEntityInstances.length === 0) {
         if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
           await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
@@ -238,7 +239,60 @@ export const BookingForm = () => {
               </div>}
           </div>
 
+          <div className="flex flex-wrap -mx-3 my-2 block">
+            <div className="w-full text-lg md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-2">
+              Select Main Occupation <span className="text-red-500 font-xl">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  onChange={(e) => changeData({ key: "pK0K4T2Cq2f", value: e.target.value })}
+                  id="mainoccupation"
+                  value={store.pK0K4T2Cq2f}
+                  className="block appearance-none w-full  border border-gray-200 text-gray-500 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                >
+                  <option value="none">--Select Main Occupation --</option>
+                  <option>Student/Pupil</option>
+                  <option>Business man/woman</option>
+                  <option>Self Employed</option>
+                  <option>Civil Servant</option>
+                  <option>Medical Professional</option>
+                  <option>Teaching Professional</option>
+                  <option>Finance and Administration Professionals</option>
+                  <option>ICT Professional</option>
+                  <option>Legal Professional</option>
+                  <option>Technical Professional</option>
+                  <option>Clergy Professional</option>
+                  <option>Clerical Professional</option>
+                  <option>Non Skilled Laborer</option>
+                  <option>Hotel and Leisure Professional</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            {store.pK0K4T2Cq2f === 'Student/Pupil' &&
+              <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                  School Level <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <select
+                    onChange={(e) => changeData({ key: "ZpvNoELGUnJ", value: e.target.value })}
+                    id="schoollevel"
+                    value={store.ZpvNoELGUnJ}
+                    className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  >
+                    <option value="none">--Choose School Level--</option>
+                    <option>Primary</option>
+                    <option>Secondary</option>
+                    <option>Vocational</option>
+                    <option>Tertiary</option>
+                    <option>University</option>
+                  </select>
 
+                </div>
+              </div>}
+          </div>
           <div className="w-full flex flex-wrap -mx-3 ">
             <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
@@ -298,21 +352,7 @@ export const BookingForm = () => {
             />
           </div>
           <div className="w-full flex flex-wrap -mx-3 ">
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Occupation <span className="text-red-500">*</span>
-              </label>
-              <input
-                onChange={(e) => changeData({ key: "LY2bDXpNvS7", value: e.target.value })}
-                id="occupation"
-                value={store.LY2bDXpNvS7}
-                className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                type="text"
-                placeholder=""
-                required
-              />
-            </div>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">
                 Priority Group <span className="text-red-500">*</span>
               </label>
@@ -337,7 +377,7 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Phone Number <span className="text-red-500">*</span>
               </label>
@@ -573,6 +613,7 @@ export const BookingForm = () => {
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-700 text-white text-sm  font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline"
+              
             >
               SUBMIT
             </button>

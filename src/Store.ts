@@ -15,7 +15,6 @@ export const $store = domain.createStore<{ [key: string]: any }>({
   sB1IHYu2xQT: "",
   pCnbIVhxv4j: "",
   Ewi7FUfcHAD: "",
-  LY2bDXpNvS7: "",
   ZHF7EsKgiaM: "",
   VmftwW8JH3g: "",
   CFbojfdkIIj: "",
@@ -28,6 +27,8 @@ export const $store = domain.createStore<{ [key: string]: any }>({
   FZzQbW8AWVd: "",
   ciCR6BBvIT4: "",
   zyhxsh0kFx5: "",
+  ZpvNoELGUnJ: "",
+  pK0K4T2Cq2f: "",
   Bkgeb98v5Ea: "", //self Registered (DE)
   dob: moment(),
   dueDate: moment(),
