@@ -92,8 +92,12 @@ export const BookingForm = () => {
                 value: true
               },
               {
-                dataElement: "Bu7jnTZ6i9m",
+                dataElement: "Bu7jnTZ6i9m", 
                 value: false
+              },
+              {
+                trackedEntityAttribute: "J6BhDfAyfhf",
+                value: true
               }
               ]
             },
@@ -204,6 +208,21 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
+            {store.pCnbIVhxv4j === 'National' &&
+              <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                  NIN (For Ugandans)
+                </label>
+                <input
+
+                  onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
+                  id="nin"
+                  value={store.Ewi7FUfcHAD}
+                  className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                  placeholder="Enter Your NIN (14 Characters)"
+                />
+              </div>}
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Sex <span className="text-red-500">*</span>
@@ -222,26 +241,69 @@ export const BookingForm = () => {
 
               </div>
             </div>
-            {store.pCnbIVhxv4j === 'National' &&
-              <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  NIN (For Ugandans)
-                </label>
-                <input
+            
+          </div>
+          <div className="w-full flex flex-wrap -mx-3 ">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
+                Alternative ID Type
+              </label>
+              <div className="relative">
+                <select
+                  onChange={(e) => changeData({ key: "ud4YNaOH3Dw", value: e.target.value })}
+                  id="alternativeidtype"
+                  value={store.ud4YNaOH3Dw}
+                  className="block appearance-none w-full  border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                >
+                  <option value="">--Select Alternative ID Type--</option>
+                  <option>Employee ID</option>
+                  <option>Passport</option>
+                  <option>Voters Card</option>
+                  <option>Foreign National ID</option>
+                  <option>Driving License ID</option>
+                  <option>Other ID</option>
+                  <option>Refugee ID</option>
+                  <option>Guarantor NIN</option>
+                </select>
+              </div>
+            </div>
 
-                  onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
-                  id="nin"
-                  value={store.Ewi7FUfcHAD}
-                  className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="text"
-                  placeholder="Enter Your NIN (14 Characters)"
-                />
-              </div>}
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
+                Alternative ID Number
+              </label>
+              <input
+                onChange={(e) => changeData({ key: "YvnFn4IjKzx", value: e.target.value })}
+                id="alternativeidnumber"
+                value={store.YvnFn4IjKzx}
+                className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="text"
+                placeholder="Enter alternative ID here!!"
+              />
+            </div>
           </div>
 
+          <h1 className="text-sm py-2 text-center flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-4 my-2">
+            General Information
+          </h1>
+
+          <div className="w-full">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-6 md:my-2">
+              Client Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              onChange={(e) => changeData({ key: "sB1IHYu2xQT", value: e.target.value })}
+              id="clientname"
+              value={store.sB1IHYu2xQT}
+              className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              type="text"
+              placeholder="Full Name"
+              required
+            />
+          </div>
           <div className="flex flex-wrap -mx-3 my-2 block">
             <div className="w-full text-lg md:w-1/2 px-3 mb-6 md:my-2">
-              <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-2">
+              <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-6 md:my-2">
               Select Main Occupation <span className="text-red-500 font-xl">*</span>
               </label>
               <div className="relative">
@@ -272,7 +334,7 @@ export const BookingForm = () => {
             </div>
             {store.pK0K4T2Cq2f === 'Student/Pupil' &&
               <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-6 md:my-2">
                   School Level <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -295,65 +357,7 @@ export const BookingForm = () => {
           </div>
           <div className="w-full flex flex-wrap -mx-3 ">
             <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
-              <label className="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2">
-                Alternative ID Type
-              </label>
-              <div className="relative">
-                <select
-                  onChange={(e) => changeData({ key: "ud4YNaOH3Dw", value: e.target.value })}
-                  id="alternativeidtype"
-                  value={store.ud4YNaOH3Dw}
-                  className="block appearance-none w-full  border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                >
-                  <option value="">--Select Alternative ID Type--</option>
-                  <option>Employee ID</option>
-                  <option>Passport</option>
-                  <option>Voters Card</option>
-                  <option>Foreign National ID</option>
-                  <option>Driving License ID</option>
-                  <option>Other ID</option>
-                  <option>Refugee ID</option>
-                  <option>Guarantor NIN</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
-                Alternative ID Number
-              </label>
-              <input
-                onChange={(e) => changeData({ key: "YvnFn4IjKzx", value: e.target.value })}
-                id="alternativeidnumber"
-                value={store.YvnFn4IjKzx}
-                className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                type="text"
-                placeholder="Enter alternative ID here!!"
-              />
-            </div>
-          </div>
-
-          <h1 className="text-sm py-2 text-center flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-4 my-2">
-            General Information
-          </h1>
-
-          <div className="w-full">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
-              Client Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              onChange={(e) => changeData({ key: "sB1IHYu2xQT", value: e.target.value })}
-              id="clientname"
-              value={store.sB1IHYu2xQT}
-              className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="text"
-              placeholder="Full Name"
-              required
-            />
-          </div>
-          <div className="w-full flex flex-wrap -mx-3 ">
-            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0 ">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold  ">
                 Priority Group <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -377,7 +381,7 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-2 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Phone Number <span className="text-red-500">*</span>
               </label>
@@ -394,7 +398,7 @@ export const BookingForm = () => {
           </div>
 
           <div className="w-full flex flex-wrap -mx-3">
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0  ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2 ">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Date of Birth <span className="text-red-500">*</span>
               </label>
@@ -412,7 +416,7 @@ export const BookingForm = () => {
                 
               </div>
             </div>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Age <span className="text-red-500">*</span>
               </label>
@@ -428,7 +432,7 @@ export const BookingForm = () => {
             </div>
 
 
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Alternative Phone Number
               </label>
@@ -463,7 +467,7 @@ export const BookingForm = () => {
             Client's Residence Address
           </h1>
           <div className="w-full flex flex-wrap -mx-3">
-            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/4 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 District/Subcounty <span className="text-red-500">*</span>
               </label>
@@ -481,7 +485,7 @@ export const BookingForm = () => {
               >
               </Select>
             </div>
-            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0">
+            <div className="w-full md:w-1/4 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Parish
               </label>
@@ -494,7 +498,7 @@ export const BookingForm = () => {
                 placeholder="Parish"
               />
             </div>
-            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/4 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Village
               </label>
@@ -507,7 +511,7 @@ export const BookingForm = () => {
                 placeholder="Village"
               />
             </div>
-            <div className="w-full md:w-1/4 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/4 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Place of Work/ Study<span className="text-red-500">*</span>
               </label>
@@ -527,7 +531,7 @@ export const BookingForm = () => {
             Preffered Vaccination Site
           </h1>
           <div className="w-full flex flex-wrap -mx-3">
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-1">
                 District <span className="text-red-500">*</span>
               </label>
@@ -548,7 +552,7 @@ export const BookingForm = () => {
                 </Select>
               </div>
             </div>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Vaccination Site <span className="text-red-500">*</span>
               </label>
@@ -569,7 +573,7 @@ export const BookingForm = () => {
                 </Select>
               </div>
             </div>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:my-0 ">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="w-full block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Preferred Date of Vaccination{" "}
                 <span className="text-red-500">*</span>
