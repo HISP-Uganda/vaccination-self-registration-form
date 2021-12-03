@@ -28,10 +28,13 @@ export const $store = domain.createStore<{ [key: string]: any }>({
   ciCR6BBvIT4: "",
   zyhxsh0kFx5: "",
   ZpvNoELGUnJ: "",
-  pK0K4T2Cq2f: "",
+  // pK0K4T2Cq2f: "",
+  bCtWZGjSWM8: "", //underlying condition
   Bkgeb98v5Ea: "", //self Registered (DE)
   dob: moment(),
   dueDate: moment(),
+  // enrollmentDate: moment(),
+  // incidentDate: moment(),
   orgUnit: undefined,
 }).on(changeForm, (_, form) => form)
   .on(changeData, (state, { key, value }) => {
