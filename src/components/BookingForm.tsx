@@ -60,14 +60,13 @@ export const BookingForm = () => {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    
+
     const { orgUnit: { value }, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
     let attributes = Object.entries(others)
       .filter(([k, v]) => !!v)
       .map(([attribute, value]) => {
         return { attribute, value };
       });
-
     attributes = [...attributes, { attribute: 'Za0xkyQDpxA', value: subCountyId }, { attribute: 'NI0QRzJvQ0k', value: dob.format("YYYY-MM-DD") }]
     const payload = {
       orgUnit: value,
@@ -76,8 +75,8 @@ export const BookingForm = () => {
       enrollments: [
         {
           program: "yDuAzyqYABS",
-          enrollmentDate: "2018-12-02",
-          incidentDate: "2018-12-02",
+          enrollmentDate: moment(),
+          incidentDate: moment(),
           orgUnit: value,
           events: [
             {
@@ -92,7 +91,7 @@ export const BookingForm = () => {
                 value: true
               },
               {
-                dataElement: "Bu7jnTZ6i9m", 
+                dataElement: "Bu7jnTZ6i9m",
                 value: false
               },
               {
@@ -241,7 +240,7 @@ export const BookingForm = () => {
 
               </div>
             </div>
-            
+
           </div>
           <div className="w-full flex flex-wrap -mx-3 ">
             <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
@@ -286,25 +285,48 @@ export const BookingForm = () => {
           <h1 className="text-sm py-2 text-center flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-4 my-2">
             General Information
           </h1>
+          <div className="flex flex-wrap -mx-3 my-2 block">
+            <div className="w-full text-lg md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-6 md:my-2">
+                Client Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                onChange={(e) => changeData({ key: "sB1IHYu2xQT", value: e.target.value })}
+                id="clientname"
+                value={store.sB1IHYu2xQT}
+                className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="text"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                Underlying Condition <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  // onChange={(e) => changeData({ key: "bCtWZGjSWM8", value: e.target.value })}
+                  // id="condition"
+                  // value={store.bCtWZGjSWM8}
+                  className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                >
+                  <option value="none">--Do you have an Underlying Condition?--</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>Unknown</option>
+                </select>
 
-          <div className="w-full">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-6 md:my-2">
-              Client Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              onChange={(e) => changeData({ key: "sB1IHYu2xQT", value: e.target.value })}
-              id="clientname"
-              value={store.sB1IHYu2xQT}
-              className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="text"
-              placeholder="Full Name"
-              required
-            />
+              </div>
+            </div>
+
           </div>
+
+
           <div className="flex flex-wrap -mx-3 my-2 block">
             <div className="w-full text-lg md:w-1/2 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-6 md:my-2">
-              Select Main Occupation <span className="text-red-500 font-xl">*</span>
+                Select Main Occupation <span className="text-red-500 font-xl">*</span>
               </label>
               <div className="relative">
                 <select
@@ -344,7 +366,7 @@ export const BookingForm = () => {
                     value={store.ZpvNoELGUnJ}
                     className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   >
-                    <option value="none">--Choose School Level--</option>
+                    <option value="">--Choose School Level--</option>
                     <option>Primary</option>
                     <option>Secondary</option>
                     <option>Vocational</option>
@@ -413,7 +435,7 @@ export const BookingForm = () => {
                   disabledDate={(date: moment.Moment) => moment().diff(date, "years") < 0}
                   defaultPickerValue={moment().subtract(18, "years")}
                 />
-                
+
               </div>
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
@@ -563,7 +585,7 @@ export const BookingForm = () => {
                   isSearchable={true}
                   required={true}
                   isClearable={true}
-                  defaultValue={{ value: "Select Facility", label: "Select Facility" }}
+                  defaultValue={{ value: "select the district and facility where you intend to get vaccinated from", label: "select the district and facility where you intend to get vaccinated from" }}
                   options={facilities.map((d: { id: string, name: string }) => (
                     { value: d.id, label: d.name }
                   ))
@@ -617,7 +639,7 @@ export const BookingForm = () => {
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-700 text-white text-sm  font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline"
-              
+
             >
               SUBMIT
             </button>
