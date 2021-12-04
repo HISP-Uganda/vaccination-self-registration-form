@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { QRCode } from "react-qr-svg";
 
 export const Barcode = () => {
@@ -12,5 +12,5 @@ export const Barcode = () => {
         value="some text"
       />
     </div>
-  )
-}
+  );
+};

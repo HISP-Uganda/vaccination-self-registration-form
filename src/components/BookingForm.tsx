@@ -4,22 +4,23 @@ import axios from "axios";
 import { useStore } from "effector-react";
 import moment from "moment";
 import { FormEvent, useEffect, useState } from "react";
-import { useHistory } from 'react-router-dom';
-import Select from 'react-select';
+import { useHistory } from "react-router-dom";
+import Select from "react-select";
+import Swal from "sweetalert2";
 import { $store, changeData } from "../Store";
-import Swal from 'sweetalert2'
 
 export const BookingForm = () => {
-  const store = useStore($store)
+  const store = useStore($store);
   const history = useHistory();
   const api = axios.create({
-    baseURL: "https://services.dhis2.hispuganda.org/"
+    baseURL: "https://services.dhis2.hispuganda.org/",
   });
   const [districts, setDistricts] = useState([]);
   const [facilities, setFacilities] = useState([]);
-  const [selectedDistrict, setSelectedDistrict] = useState<{ label: string, value: string }>();
+  const [selectedDistrict, setSelectedDistrict] =
+    useState<{ label: string; value: string }>();
   const [districtSubcounty, setDistrictSubcounty] = useState([]);
-  const [vac, setVac] = useState([])
+  const [vac, setVac] = useState([]);
 
   const fetchDistricts = async () => {
     const [
@@ -29,23 +30,52 @@ export const BookingForm = () => {
       {
         data: { options: subCounties },
       },
-      { data: { organisationUnits: dataSetUnits } }
+      {
+        data: { organisationUnits: dataSetUnits },
+      },
     ] = await Promise.all([
-      api.get('dhis2', { params: { url: 'organisationUnits.json', level: '3', paging: false, fields: 'id,name' } }),
-      api.get("dhis2", { params: { url: `optionSets/d16Weazyit6.json`, paging: false, fields: 'options[name,code]' } }),
-      api.get("dhis2", { params: { url: `dataSets/nTlQefWKMmb.json`, fields: "organisationUnits[id,name,parent[id,name,parent[id,name]]" } })
+      api.get("dhis2", {
+        params: {
+          url: "organisationUnits.json",
+          level: "3",
+          paging: false,
+          fields: "id,name",
+        },
+      }),
+      api.get("dhis2", {
+        params: {
+          url: `optionSets/d16Weazyit6.json`,
+          paging: false,
+          fields: "options[name,code]",
+        },
+      }),
+      api.get("dhis2", {
+        params: {
+          url: `dataSets/nTlQefWKMmb.json`,
+          fields: "organisationUnits[id,name,parent[id,name,parent[id,name]]",
+        },
+      }),
     ]);
     setDistrictSubcounty(subCounties);
     setDistricts(organisationUnits);
-    setVac(dataSetUnits)
+    setVac(dataSetUnits);
   };
 
   const fetchDistrictFacilities = async () => {
     if (selectedDistrict) {
-      const { data: { organisationUnits } } = await api.get("dhis2", {
-        params: { url: `organisationUnits/${selectedDistrict.value}`, includeDescendants: true, paging: false, fields: 'id,name,level' },
+      const {
+        data: { organisationUnits },
+      } = await api.get("dhis2", {
+        params: {
+          url: `organisationUnits/${selectedDistrict.value}`,
+          includeDescendants: true,
+          paging: false,
+          fields: "id,name,level",
+        },
       });
-      const facilities = organisationUnits.filter((ou: any) => vac.find((f: any) => f.id === ou.id));
+      const facilities = organisationUnits.filter((ou: any) =>
+        vac.find((f: any) => f.id === ou.id)
+      );
       setFacilities(facilities);
     }
   };
@@ -61,46 +91,58 @@ export const BookingForm = () => {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const { orgUnit: { value }, dueDate, dob, Za0xkyQDpxA: { value: subCountyId }, vacFacility, ...others } = store;
+    const {
+      orgUnit: { value },
+      dueDate,
+      dob,
+      Za0xkyQDpxA: { value: subCountyId },
+      vacFacility,
+      ...others
+    } = store;
     let attributes = Object.entries(others)
       .filter(([k, v]) => !!v)
       .map(([attribute, value]) => {
         return { attribute, value };
       });
-    attributes = [...attributes, { attribute: 'Za0xkyQDpxA', value: subCountyId }, { attribute: 'NI0QRzJvQ0k', value: dob.format("YYYY-MM-DD") }]
+    attributes = [
+      ...attributes,
+      { attribute: "Za0xkyQDpxA", value: subCountyId },
+      { attribute: "NI0QRzJvQ0k", value: dob.format("YYYY-MM-DD") },
+    ];
     const payload = {
       orgUnit: value,
       trackedEntityType: "MCPQUTHX1Ze",
-      dob: dob.format("YYYY-MM-DD"),
+      dob: dob.format("YYYY-MM-DD").format("YYYY-MM-DD"),
       enrollments: [
         {
           program: "yDuAzyqYABS",
-          enrollmentDate: moment(),
-          incidentDate: moment(),
+          enrollmentDate: moment().format("YYYY-MM-DD"),
+          incidentDate: moment().format("YYYY-MM-DD"),
           orgUnit: value,
-          events: [
-            {
-              program: "yDuAzyqYABS",
-              orgUnit: value,
-              eventDate: dueDate.format("YYYY-MM-DD"),
-              dueDate: dueDate.format("YYYY-MM-DD"),
-              status: "ACTIVE",
-              programStage: "a1jCssI2LkW",
-              dataValues: [{
-                dataElement: "Bkgeb98v5Ea",
-                value: true
-              },
-              {
-                dataElement: "Bu7jnTZ6i9m",
-                value: false
-              },
-              {
-                trackedEntityAttribute: "J6BhDfAyfhf",
-                value: true
-              }
-              ]
-            },
-          ],
+          // events: [
+          //   {
+          //     program: "yDuAzyqYABS",
+          //     orgUnit: value,
+          //     eventDate: dueDate.format("YYYY-MM-DD").format("YYYY-MM-DD"),
+          //     dueDate: dueDate.format("YYYY-MM-DD").format("YYYY-MM-DD"),
+          //     status: "ACTIVE",
+          //     programStage: "a1jCssI2LkW",
+          //     dataValues: [
+          //       {
+          //         dataElement: "Bkgeb98v5Ea",
+          //         value: true,
+          //       },
+          //       {
+          //         dataElement: "Bu7jnTZ6i9m",
+          //         value: false,
+          //       },
+          //       {
+          //         trackedEntityAttribute: "J6BhDfAyfhf",
+          //         value: true,
+          //       },
+          //     ],
+          //   },
+          // ],
         },
       ],
       attributes,
@@ -108,86 +150,104 @@ export const BookingForm = () => {
     //data is false if NIN exists
     if (store.Ewi7FUfcHAD) {
       if (/^C[M|F][0-9]{5}[A-Z0-9]{7}$/.test(store.Ewi7FUfcHAD)) {
-        const { data: { trackedEntityInstances } } = await api.get("dhis2", {
-          params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.Ewi7FUfcHAD} ` },
-        })
-        console.log(trackedEntityInstances)
+        const {
+          data: { trackedEntityInstances },
+        } = await api.get("dhis2", {
+          params: {
+            url: "trackedEntityInstances",
+            program: "yDuAzyqYABS",
+            ouMode: "ALL",
+            filter: `Ewi7FUfcHAD:eq:${store.Ewi7FUfcHAD} `,
+          },
+        });
+        console.log(trackedEntityInstances);
         if (trackedEntityInstances.length === 0) {
           if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
-            await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
-            history.push('/output')
+            await api.post("dhis2", payload, {
+              params: { url: "trackedEntityInstances" },
+            });
+            history.push("/output");
             Swal.fire({
-              icon: 'success',
-              title: 'Congratulations',
-              text: 'You have Successfully Registered for vaccination!!'
-            })
-            console.log(payload)
+              icon: "success",
+              title: "Congratulations",
+              text: "You have Successfully Registered for vaccination!!",
+            });
+            console.log(payload);
           } else {
             Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Please eneter the right format of the phone number e.g 256788907653 !',
-            })
+              icon: "error",
+              title: "Error",
+              text: "Please eneter the right format of the phone number e.g 256788907653 !",
+            });
           }
         } else {
           Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Please Enter a different NIN',
-          })
+            icon: "error",
+            title: "Error",
+            text: "Please Enter a different NIN",
+          });
         }
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'NIN must be 14 Characters!'
-        })
+          icon: "error",
+          title: "Error",
+          text: "NIN must be 14 Characters!",
+        });
       }
     } else if (store.YvnFn4IjKzx) {
-      const { data: { trackedEntityInstances } } = await api.get("dhis2", {
-        params: { url: 'trackedEntityInstances', program: 'yDuAzyqYABS', ouMode: 'ALL', filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} ` },
-      })
+      const {
+        data: { trackedEntityInstances },
+      } = await api.get("dhis2", {
+        params: {
+          url: "trackedEntityInstances",
+          program: "yDuAzyqYABS",
+          ouMode: "ALL",
+          filter: `Ewi7FUfcHAD:eq:${store.ud4YNaOH3Dw} `,
+        },
+      });
       //console.log(trackedEntityInstances)
       if (trackedEntityInstances.length === 0) {
         if (/^256[7|4|8|3|2][0-9]{8}$/.test(store.ciCR6BBvIT4)) {
-          await api.post("dhis2", payload, { params: { url: 'trackedEntityInstances' } });
-          history.push('/output')
+          await api.post("dhis2", payload, {
+            params: { url: "trackedEntityInstances" },
+          });
+          history.push("/output");
           Swal.fire({
-            icon: 'success',
-            title: 'Congratulations',
-            text: 'You have Successfully Registered for vaccination!!'
-          })
+            icon: "success",
+            title: "Congratulations",
+            text: "You have Successfully Registered for vaccination!!",
+          });
         } else {
           Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Please eneter the right format of the phone number e.g 256788907653 !',
-          })
+            icon: "error",
+            title: "Error",
+            text: "Please eneter the right format of the phone number e.g 256788907653 !",
+          });
         }
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Please Enter a different Alternative ID Number!',
-        })
+          icon: "error",
+          title: "Error",
+          text: "Please Enter a different Alternative ID Number!",
+        });
       }
-
-    }
-    else
+    } else
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'please Enter an Alternative ID Number!',
-      })
+        icon: "error",
+        title: "Error",
+        text: "please Enter an Alternative ID Number!",
+      });
   }
 
   return (
     <div>
       <div className="px-16  my-2 text-xl ">
-        <form onSubmit={(e) => submit(e)} ><div className="flex justify-center block">
-          <h1 className="text-sm py-1 w-full flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-8 right">
-            Identification
-          </h1></div>
+        <form onSubmit={(e) => submit(e)}>
+          <div className="flex justify-center block">
+            <h1 className="text-sm py-1 w-full flex border-solid bg-gray-100 font-bold text-gray-500 uppercase mt-8 right">
+              Identification
+            </h1>
+          </div>
           <div className="flex flex-wrap -mx-3 my-2 block">
             <div className="w-full text-lg md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-2">
@@ -195,7 +255,9 @@ export const BookingForm = () => {
               </label>
               <div className="relative">
                 <select
-                  onChange={(e) => changeData({ key: "pCnbIVhxv4j", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "pCnbIVhxv4j", value: e.target.value })
+                  }
                   id="clientcategory"
                   value={store.pCnbIVhxv4j}
                   className="block appearance-none w-full  border border-gray-200 text-gray-500 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -207,28 +269,32 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
-            {store.pCnbIVhxv4j === 'National' &&
+            {store.pCnbIVhxv4j === "National" && (
               <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   NIN (For Ugandans)
                 </label>
                 <input
-
-                  onChange={(e) => changeData({ key: "Ewi7FUfcHAD", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "Ewi7FUfcHAD", value: e.target.value })
+                  }
                   id="nin"
                   value={store.Ewi7FUfcHAD}
                   className="appearance-none block w-full text-gray-700  border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
                   placeholder="Enter Your NIN (14 Characters)"
                 />
-              </div>}
+              </div>
+            )}
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Sex <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <select
-                  onChange={(e) => changeData({ key: "FZzQbW8AWVd", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "FZzQbW8AWVd", value: e.target.value })
+                  }
                   id="sex"
                   value={store.FZzQbW8AWVd}
                   className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -237,10 +303,8 @@ export const BookingForm = () => {
                   <option>MALE</option>
                   <option>FEMALE</option>
                 </select>
-
               </div>
             </div>
-
           </div>
           <div className="w-full flex flex-wrap -mx-3 ">
             <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
@@ -249,7 +313,9 @@ export const BookingForm = () => {
               </label>
               <div className="relative">
                 <select
-                  onChange={(e) => changeData({ key: "ud4YNaOH3Dw", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "ud4YNaOH3Dw", value: e.target.value })
+                  }
                   id="alternativeidtype"
                   value={store.ud4YNaOH3Dw}
                   className="block appearance-none w-full  border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -272,7 +338,9 @@ export const BookingForm = () => {
                 Alternative ID Number
               </label>
               <input
-                onChange={(e) => changeData({ key: "YvnFn4IjKzx", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "YvnFn4IjKzx", value: e.target.value })
+                }
                 id="alternativeidnumber"
                 value={store.YvnFn4IjKzx}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -291,7 +359,9 @@ export const BookingForm = () => {
                 Client Name <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => changeData({ key: "sB1IHYu2xQT", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "sB1IHYu2xQT", value: e.target.value })
+                }
                 id="clientname"
                 value={store.sB1IHYu2xQT}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 my-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -311,26 +381,28 @@ export const BookingForm = () => {
                   // value={store.bCtWZGjSWM8}
                   className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
-                  <option value="none">--Do you have an Underlying Condition?--</option>
+                  <option value="none">
+                    --Do you have an Underlying Condition?--
+                  </option>
                   <option>Yes</option>
                   <option>No</option>
                   <option>Unknown</option>
                 </select>
-
               </div>
             </div>
-
           </div>
-
 
           <div className="flex flex-wrap -mx-3 my-2 block">
             <div className="w-full text-lg md:w-1/2 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-900 text-xs font-bold mb-6 md:my-2">
-                Select Main Occupation <span className="text-red-500 font-xl">*</span>
+                Select Main Occupation{" "}
+                <span className="text-red-500 font-xl">*</span>
               </label>
               <div className="relative">
                 <select
-                  onChange={(e) => changeData({ key: "pK0K4T2Cq2f", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "pK0K4T2Cq2f", value: e.target.value })
+                  }
                   id="mainoccupation"
                   value={store.pK0K4T2Cq2f}
                   className="block appearance-none w-full  border border-gray-200 text-gray-500 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -354,14 +426,16 @@ export const BookingForm = () => {
                 </select>
               </div>
             </div>
-            {store.pK0K4T2Cq2f === 'Student/Pupil' &&
+            {store.pK0K4T2Cq2f === "Student/Pupil" && (
               <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-6 md:my-2">
                   School Level <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <select
-                    onChange={(e) => changeData({ key: "ZpvNoELGUnJ", value: e.target.value })}
+                    onChange={(e) =>
+                      changeData({ key: "ZpvNoELGUnJ", value: e.target.value })
+                    }
                     id="schoollevel"
                     value={store.ZpvNoELGUnJ}
                     className="block appearance-none w-full border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -373,9 +447,9 @@ export const BookingForm = () => {
                     <option>Tertiary</option>
                     <option>University</option>
                   </select>
-
                 </div>
-              </div>}
+              </div>
+            )}
           </div>
           <div className="w-full flex flex-wrap -mx-3 ">
             <div className="w-full md:w-1/2 px-3 mb-6 md:my-2">
@@ -384,7 +458,9 @@ export const BookingForm = () => {
               </label>
               <div className="relative">
                 <select
-                  onChange={(e) => changeData({ key: "CFbojfdkIIj", value: e.target.value })}
+                  onChange={(e) =>
+                    changeData({ key: "CFbojfdkIIj", value: e.target.value })
+                  }
                   id="prioritygroup"
                   value={store.CFbojfdkIIj}
                   className="block appearance-none w-full my-2 border border-gray-200 text-gray-700 text-xs py-2 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -408,7 +484,9 @@ export const BookingForm = () => {
                 Phone Number <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => changeData({ key: "ciCR6BBvIT4", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "ciCR6BBvIT4", value: e.target.value })
+                }
                 id="phonenumber"
                 value={store.ciCR6BBvIT4}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -427,15 +505,18 @@ export const BookingForm = () => {
               <div className="relative">
                 <DatePicker
                   onChange={(date) => {
-                    changeData({ key: "dob", value: date })
-                    changeData({ key: "s2Fmb8zgEem", value: moment().diff(date, "years") })
-
+                    changeData({ key: "dob", value: date });
+                    changeData({
+                      key: "s2Fmb8zgEem",
+                      value: moment().diff(date, "years"),
+                    });
                   }}
                   value={store.dob}
-                  disabledDate={(date: moment.Moment) => moment().diff(date, "years") < 0}
+                  disabledDate={(date: moment.Moment) =>
+                    moment().diff(date, "years") < 0
+                  }
                   defaultPickerValue={moment().subtract(18, "years")}
                 />
-
               </div>
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
@@ -444,7 +525,9 @@ export const BookingForm = () => {
               </label>
               <input
                 disabled
-                onChange={(e) => changeData({ key: "s2Fmb8zgEem", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "s2Fmb8zgEem", value: e.target.value })
+                }
                 id="sex"
                 value={store.s2Fmb8zgEem}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -453,13 +536,14 @@ export const BookingForm = () => {
               />
             </div>
 
-
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Alternative Phone Number
               </label>
               <input
-                onChange={(e) => changeData({ key: "SSGgoQ6SnCx", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "SSGgoQ6SnCx", value: e.target.value })
+                }
                 id="alternativenumber"
                 value={store.SSGgoQ6SnCx}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -473,7 +557,9 @@ export const BookingForm = () => {
               Relationship with Alternative Phone Number
             </label>
             <input
-              onChange={(e) => changeData({ key: "Sqq2zIYWBOK", value: e.target.value })}
+              onChange={(e) =>
+                changeData({ key: "Sqq2zIYWBOK", value: e.target.value })
+              }
               id="relationshipwithalterntivenumber"
               value={store.Sqq2zIYWBOK}
               className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -498,21 +584,27 @@ export const BookingForm = () => {
                 onChange={(value) => changeData({ key: "Za0xkyQDpxA", value })}
                 isSearchable={true}
                 isClearable={true}
-                defaultValue={{ value: "Select District/SubCounty", label: "Select District/SubCounty" }}
-                options={districtSubcounty.map((d: { code: string, name: string }) => (
-                  { value: d.code, label: d.name }
-                ))
-                }
+                defaultValue={{
+                  value: "Select District/SubCounty",
+                  label: "Select District/SubCounty",
+                }}
+                options={districtSubcounty.map(
+                  (d: { code: string; name: string }) => ({
+                    value: d.code,
+                    label: d.name,
+                  })
+                )}
                 className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-              </Select>
+              ></Select>
             </div>
             <div className="w-full md:w-1/4 px-3 mb-6 md:my-2">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Parish
               </label>
               <input
-                onChange={(e) => changeData({ key: "M3trOwAtMqR", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "M3trOwAtMqR", value: e.target.value })
+                }
                 id="parish"
                 value={store.M3trOwAtMqR}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -525,7 +617,9 @@ export const BookingForm = () => {
                 Village
               </label>
               <input
-                onChange={(e) => changeData({ key: "zyhxsh0kFx5", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "zyhxsh0kFx5", value: e.target.value })
+                }
                 id="village"
                 value={store.zyhxsh0kFx5}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -538,7 +632,9 @@ export const BookingForm = () => {
                 Place of Work/ Study<span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => changeData({ key: "ZHF7EsKgiaM", value: e.target.value })}
+                onChange={(e) =>
+                  changeData({ key: "ZHF7EsKgiaM", value: e.target.value })
+                }
                 id="placeofwork"
                 value={store.ZHF7EsKgiaM}
                 className="appearance-none block w-full text-gray-700 border border-gray-200 rounded text-xs py-2 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -564,14 +660,16 @@ export const BookingForm = () => {
                   isSearchable={true}
                   isClearable={true}
                   required={true}
-                  defaultValue={{ value: "Select District", label: "Select District" }}
-                  options={districts.map((d: { id: string, name: string }) => (
-                    { value: d.id, label: d.name }
-                  ))
-                  }
+                  defaultValue={{
+                    value: "Select District",
+                    label: "Select District",
+                  }}
+                  options={districts.map((d: { id: string; name: string }) => ({
+                    value: d.id,
+                    label: d.name,
+                  }))}
                   className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                >
-                </Select>
+                ></Select>
               </div>
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
@@ -585,14 +683,20 @@ export const BookingForm = () => {
                   isSearchable={true}
                   required={true}
                   isClearable={true}
-                  defaultValue={{ value: "select the district and facility where you intend to get vaccinated from", label: "select the district and facility where you intend to get vaccinated from" }}
-                  options={facilities.map((d: { id: string, name: string }) => (
-                    { value: d.id, label: d.name }
-                  ))
-                  }
+                  defaultValue={{
+                    value:
+                      "select the district and facility where you intend to get vaccinated from",
+                    label:
+                      "select the district and facility where you intend to get vaccinated from",
+                  }}
+                  options={facilities.map(
+                    (d: { id: string; name: string }) => ({
+                      value: d.id,
+                      label: d.name,
+                    })
+                  )}
                   className="block appearance-none w-full text-gray-700 text-xs px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                >
-                </Select>
+                ></Select>
               </div>
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:my-2">
@@ -602,9 +706,13 @@ export const BookingForm = () => {
               </label>
               <div className="">
                 <DatePicker
-                  onChange={(date) => changeData({ key: "dueDate", value: date })}
+                  onChange={(date) =>
+                    changeData({ key: "dueDate", value: date })
+                  }
                   value={store.dueDate}
-                  disabledDate={(date: moment.Moment) => date.isBefore(moment())}
+                  disabledDate={(date: moment.Moment) =>
+                    date.isBefore(moment())
+                  }
                 />
               </div>
             </div>
@@ -613,9 +721,13 @@ export const BookingForm = () => {
             Disclaimer
           </h1>
           <div className="w-full my-2 ">
-            <div >
+            <div>
               <label className=" block text-gray-500 font-bold">
-                <input className="mr-2 leading-tight" type="checkbox" required />
+                <input
+                  className="mr-2 leading-tight"
+                  type="checkbox"
+                  required
+                />
                 <span className="text-sm">
                   <span className="text-red-500">*</span>Agree to Terms and
                   Conditions?
@@ -624,7 +736,10 @@ export const BookingForm = () => {
             </div>
           </div>
           <div className="flex items-center justify-between pb-8">
-            <button onClick={() => { history.push('/') }}
+            <button
+              onClick={() => {
+                history.push("/");
+              }}
               className="bg-yellow-500 hover:bg-yellow-800 text-white font-bold py-2 px-2 text-sm rounded focus:outline-none focus:shadow-outline"
               type="button"
             >
@@ -639,7 +754,6 @@ export const BookingForm = () => {
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-700 text-white text-sm  font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline"
-
             >
               SUBMIT
             </button>
