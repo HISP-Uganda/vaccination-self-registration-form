@@ -75,8 +75,8 @@ export const BookingForm = () => {
       enrollments: [
         {
           program: "yDuAzyqYABS",
-          enrollmentDate: moment(),
-          incidentDate: moment(),
+          enrollmentDate: moment().format("YYYY-MM-DD"),
+          incidentDate: moment().format("YYYY-MM-DD"),
           orgUnit: value,
           events: [
             {
@@ -84,7 +84,7 @@ export const BookingForm = () => {
               orgUnit: value,
               eventDate: dueDate.format("YYYY-MM-DD"),
               dueDate: dueDate.format("YYYY-MM-DD"),
-              status: "ACTIVE",
+              status: "SCHEDULE",
               programStage: "a1jCssI2LkW",
               dataValues: [{
                 dataElement: "Bkgeb98v5Ea",
